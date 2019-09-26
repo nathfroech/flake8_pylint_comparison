@@ -1,0 +1,21 @@
+pip-tools  # https://github.com/jazzband/pip-tools
+
+# Linters
+pre-commit
+yamllint
+restructuredtext-lint
+pygments # Required for restructuredtext-lint
+mypy
+
+wemake-python-styleguide
+yesqa
+
+# Lower versions of astroid conflict with last mypy versions because of typed-ast dependency
+-e git+git@github.com:PyCQA/astroid.git#egg=astroid
+# astroid>=2.3.1
+pylint
+
+# Tests
+pytest
+pytest-cov
+PyHamcrest
