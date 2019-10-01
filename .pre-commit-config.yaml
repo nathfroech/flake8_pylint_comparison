@@ -37,7 +37,6 @@ repos:
           - commit
       - id: mixed-line-ending  # Replaces or checks mixed line ending
         args: [--fix=lf]
-        exclude: '\.bat$'
         stages:
           - commit
       - id: trailing-whitespace  # This hook trims trailing whitespace.
@@ -116,7 +115,6 @@ repos:
         language: system
         args: [--config-file, setup.cfg]
         types: [python]
-        exclude: 'docs/conf\.py|setup\.py'
         stages:
           - commit
   # Other specific files and file types checks
@@ -152,7 +150,5 @@ repos:
         entry: rst-lint
         language: system
         files: \.rst$
-        # TODO: Find a workaround for linting files with sphinx directives
-        exclude: '(CONTRIBUTING\.rst)|(docs/(contributing|installation|index)\.rst)'
         stages:
           - commit
