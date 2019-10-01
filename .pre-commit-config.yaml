@@ -50,7 +50,7 @@ repos:
         entry: Hyphens should not be used in file names, use underscores instead
         language: fail
         files: '.*-.*'
-        exclude: '.pre-commit-config.yaml'
+        exclude: '.pre-commit-config.yaml|\.pylintrc-test|setup-test\.cfg'
       - id: camelcase-filenames
         name: Check file names for camelcase
         entry: Capital letters should not be used in file names, use snake_case everywhere
