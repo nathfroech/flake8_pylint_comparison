@@ -1,0 +1,28 @@
+# Copy and uncomment the following part when adding notes for new rule
+#- flake8_code:
+#  pylint_code:
+#  short_description:
+#  flake8_partial_support:
+#  pylint_partial_support:
+
+- flake8_code: A001
+  pylint_code: W0622
+  short_description: Variable/function/class name overrides a built-in
+  flake8_partial_support:
+  pylint_partial_support: Does not support list comprehensions and exceptions
+  flake8_plugin: flake8-builtins
+  tests: test_shadowing_builtins.py
+- flake8_code: A002
+  pylint_code: W0622
+  short_description: Function parameter name overrides a built-in
+  flake8_partial_support:
+  pylint_partial_support:
+  flake8_plugin: flake8-builtins
+  tests: test_shadowing_builtins.py
+- flake8_code: A003
+  pylint_code:
+  short_description: Class attribute/method name overrides a built-in
+  flake8_partial_support:
+  pylint_partial_support:
+  flake8_plugin: flake8-builtins
+  tests: test_shadowing_builtins.py
