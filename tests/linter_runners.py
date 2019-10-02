@@ -9,7 +9,7 @@ from hamcrest.core.helpers.wrap_matcher import wrap_matcher
 
 PROJECT_ROOT = pathlib.Path(__file__).resolve().parents[1]
 
-FLAKE8_ERROR_PATTERN = re.compile(r'(?P<module>/tmp/.+\.py):(?P<line>\d+): \[(?P<code>[A-Z]+\d+)\] (?P<message>.+)')
+FLAKE8_ERROR_PATTERN = re.compile(r'(?P<module>/tmp/.+\.py):(?P<line>\d+): \[(?P<code>[A-Z]+\d+):?\] (?P<message>.+)')
 PYLINT_ERROR_PATTERN = re.compile(r'(?P<module>/tmp/.+\.py):(?P<line>\d+):(?P<col>\d+): (?P<code>[A-Z]+\d+): (?P<message>.+) \((?P<verbose_code>[a-z\-]+)\)')  # noqa: E501 line too long
 
 

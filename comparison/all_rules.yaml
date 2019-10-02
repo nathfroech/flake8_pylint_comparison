@@ -4,12 +4,15 @@
 #  short_description:
 #  flake8_partial_support:
 #  pylint_partial_support:
+#  flake8_plugin:
+#  tests:
 
+# flake8-builtins
 - flake8_code: A001
   pylint_code: W0622
   short_description: Variable/function/class name overrides a built-in
   flake8_partial_support:
-  pylint_partial_support: Does not support list comprehensions and exceptions
+  pylint_partial_support: Does not support comprehensions and `except ... as ...`
   flake8_plugin: flake8-builtins
   tests: test_shadowing_builtins.py
 - flake8_code: A002
@@ -26,3 +29,62 @@
   pylint_partial_support:
   flake8_plugin: flake8-builtins
   tests: test_shadowing_builtins.py
+
+# flake8-bugbear
+- flake8_code: B001
+  pylint_code: W0702
+  short_description: Bare `except` used instead of catching a specific exception
+  flake8_partial_support:
+  pylint_partial_support:
+  flake8_plugin: flake8-bugbear
+  tests: test_exceptions.py
+- flake8_code: B002
+  pylint_code: E0107
+  short_description: Using unnecessary operators (like ++1)
+  flake8_partial_support: Only `++` case is supported, but not `--`. See WPS330 for broader rules.
+  pylint_partial_support:
+  flake8_plugin: flake8-bugbear
+  tests: test_arithmetics_operators.py
+  note: Can be supressed in favor broader rule WPS330
+- flake8_code: B003
+  pylint_code:
+  short_description: Assigning to `os.environ`
+  flake8_partial_support:
+  pylint_partial_support:
+  flake8_plugin: flake8-bugbear
+  tests: test_os_utils.py
+- flake8_code: B004
+  pylint_code:
+  short_description: Checking if object is callable by getting a '__call__' attribute
+  flake8_partial_support:
+  pylint_partial_support:
+  flake8_plugin: flake8-bugbear
+  tests: test_attributes.py
+- flake8_code: B005
+  pylint_code:
+  short_description: Using `.strip()` with repeated characters in passed argument
+  flake8_partial_support:
+  pylint_partial_support:
+  flake8_plugin: flake8-bugbear
+  tests: test_string_operations.py
+- flake8_code: B006
+  pylint_code: W0102
+  short_description: Using mutable value as parameter default value
+  flake8_partial_support: Does not warn if module-level mutable value is used as default parameter value.
+  pylint_partial_support: Does not support keyword-only arguments and call results.
+  flake8_plugin: flake8-bugbear
+  tests: test_function_parameters.py
+- flake8_code: B007
+  pylint_code:
+  short_description: Unused loop variable.
+  flake8_partial_support:
+  pylint_partial_support:
+  flake8_plugin: flake8-bugbear
+  tests: test_loops.py
+- flake8_code: B008
+  pylint_code:
+  short_description: Using fucntion call result as parameter default value
+  flake8_partial_support:
+  pylint_partial_support:
+  flake8_plugin: flake8-bugbear
+  tests: test_function_parameters.py
