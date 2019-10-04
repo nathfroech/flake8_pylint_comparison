@@ -18,6 +18,15 @@ generated from this yaml file.
 Getting started
 ---------------
 
+Initial setup
+^^^^^^^^^^^^^
+
+Python 3.6 or higher is required.
+
+* Create and activate virtual environment
+* Install requirements: ``make requirements``
+* Install pre-commit hooks: ``pre-commit install``
+
 Updating requirements
 ^^^^^^^^^^^^^^^^^^^^^
 Project uses `pip-tools
