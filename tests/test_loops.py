@@ -1,30 +1,35 @@
 import pytest
-from hamcrest import assert_that
+from hamcrest import assert_that, contains_inanyorder
 
-from tests.linter_runners import violates_rules
+from tests.testing_utils import param_wrapper, run_flake8, run_pylint
 
 params = [
     # code, flake8 rules, pylint rules
-    pytest.param((
-        'for i in range(10):\n'
-        '    print(10)'
-    ), {'B007'}, {}, id='simple_loop'),
-    pytest.param((
-        'for i in range(10):\n'
-        '    for j in range(10):\n'
-        '        for k in range(10):\n'
-        '            print(i + j)'
-    ), {'B007'}, {}, id='nested_loop'),
-    pytest.param((
-        'def strange_generator():\n'
-        '    for i in range(10):\n'
-        '        for j in range(10):\n'
-        '            for k in range(10):\n'
-        '                for l in range(10):\n'
-        '                    yield i, (j, (k, l))\n\n\n'
-        'for i, (j, (k, l)) in strange_generator():\n'
-        '    print(j, l)'
-    ), {'B007'}, {}, id='unpacking'),
+    param_wrapper((
+        'values = []',
+        'for i in range(10):',
+        '    values.append(10)',
+    ), {'B007'}, set(), id='simple_loop'),
+    param_wrapper((
+        'values = []',
+        'for i in range(10):',
+        '    for j in range(10):',
+        '        for k in range(10):',
+        '            values.append(i + j)',
+    ), {'B007'}, set(), id='nested_loop'),
+    param_wrapper((
+        'def strange_generator():',
+        '    for x in range(10):',
+        '        for y in range(10):',
+        '            for z in range(10):',
+        '                for w in range(10):',
+        '                    yield x, (y, (z, w))',
+        '',
+        '',
+        'values = []',
+        'for i, (j, (k, l)) in strange_generator():',
+        '    values.append(j, l)',
+    ), {'B007', 'WPS405', 'WPS414'}, set(), id='unpacking'),
 ]
 
 
@@ -32,4 +37,8 @@ params = [
 def test_detects_unused_loop_variables(content, flake8_errors, pylint_errors, file_to_lint):
     file_to_lint.write_text(content)
 
-    assert_that(file_to_lint, violates_rules(flake8_errors=flake8_errors, pylint_errors=pylint_errors))
+    found_flake8_errors = run_flake8(file_to_lint)
+    assert_that(set(found_flake8_errors), contains_inanyorder(*flake8_errors))
+
+    found_pylint_errors = run_pylint(file_to_lint)
+    assert_that(set(found_pylint_errors), contains_inanyorder(*pylint_errors))

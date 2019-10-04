@@ -6,6 +6,7 @@
 #  pylint_partial_support:
 #  flake8_plugin:
 #  tests:
+#  note:
 
 # flake8-builtins
 - flake8_code: A001
@@ -45,7 +46,7 @@
   pylint_partial_support:
   flake8_plugin: flake8-bugbear
   tests: test_arithmetics_operators.py
-  note: Can be supressed in favor broader rule WPS330
+  note: Can be supressed in favor of broader rule WPS330
 - flake8_code: B003
   pylint_code:
   short_description: Assigning to `os.environ`
@@ -74,6 +75,7 @@
   pylint_partial_support: Does not support keyword-only arguments and call results.
   flake8_plugin: flake8-bugbear
   tests: test_function_parameters.py
+  note: WPS404 covers the same case
 - flake8_code: B007
   pylint_code:
   short_description: Unused loop variable.
@@ -88,3 +90,4 @@
   pylint_partial_support:
   flake8_plugin: flake8-bugbear
   tests: test_function_parameters.py
+  note: WPS404 covers the same case

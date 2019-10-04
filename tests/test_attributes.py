@@ -1,14 +1,12 @@
 import pytest
-from hamcrest import assert_that
+from hamcrest import assert_that, contains_inanyorder
 
-from tests.linter_runners import violates_rules
-
-B004 = {'B004'}
+from tests.testing_utils import param_wrapper, run_flake8, run_pylint
 
 callable_check_params = [
     # code, flake8 rules, pylint rules
-    pytest.param('hasattr(o, "__call__")', B004, {}, id='hasattr'),
-    pytest.param('getattr(o, "__call__", False)', B004, {}, id='getattr'),
+    param_wrapper("hasattr(o, '__call__')", {'B004', 'WPS421'}, set(), id='hasattr'),
+    param_wrapper("getattr(o, '__call__', default=False)", {'B004', 'B009'}, set(), id='getattr'),
 ]
 
 
@@ -16,4 +14,8 @@ callable_check_params = [
 def test_detects_incorrect_check_for_callable(content, flake8_errors, pylint_errors, file_to_lint):
     file_to_lint.write_text(content)
 
-    assert_that(file_to_lint, violates_rules(flake8_errors=flake8_errors, pylint_errors=pylint_errors))
+    found_flake8_errors = run_flake8(file_to_lint)
+    assert_that(found_flake8_errors, contains_inanyorder(*flake8_errors))
+
+    found_pylint_errors = run_pylint(file_to_lint)
+    assert_that(found_pylint_errors, contains_inanyorder(*pylint_errors))

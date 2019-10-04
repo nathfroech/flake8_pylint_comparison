@@ -1,50 +1,54 @@
 import pytest
-from hamcrest import assert_that
+from hamcrest import assert_that, contains_inanyorder
 
-from tests.linter_runners import violates_rules
-
-B006 = {'B006'}
-
-W0102 = {'W0102'}
+from tests.testing_utils import param_wrapper, run_flake8, run_pylint
 
 params = [
     # code, flake8 rules, pylint rules
-    pytest.param((
-        'def foo(value=[1, 2, 3]):\n'
-        '    pass'
-    ), B006, W0102, id='list_as_default'),
-    pytest.param((
-        'def foo(*, value=[1, 2, 3]):\n'
-        '    pass'
-    ), B006, {}, id='list_as_kwonly_default'),
-    pytest.param((
-        'def foo(value={}):\n'  # noqa: P103 it's an empty dict, not string formatting
-        '    pass'
-    ), B006, W0102, id='dict_as_default'),
-    pytest.param((
-        'def foo(value=set()):\n'
-        '    pass'
-    ), B006, W0102, id='set_as_default'),
-    pytest.param((
-        'DEFAULT = {1, 2, 3}\n\n'
-        'def foo(value=DEFAULT):\n'
-        '    pass'
-    ), {}, W0102, id='variable_as_default'),
-    pytest.param((
-        'import collections\n\n\n'
-        'def foo(value=collections.OrderedDict()):\n'
-        '    pass'
-    ), B006, {}, id='ordered_dict_as_default'),
-    pytest.param((
-        'import collections\n\n\n'
-        'async def foo(value=collections.OrderedDict()):\n'
-        '    pass'
-    ), B006, {}, id='ordered_dict_as_async_default'),
-    pytest.param((
-        'import time\n\n\n'
-        'def foo(value=time.time()):\n'
-        '    pass\n'
-    ), {'B008'}, {}, id='call_as_default'),
+    param_wrapper((
+        'def check_parameter(parameter_value=[1, 2, 3]):',
+        '    return parameter_value',
+    ), {'B006', 'WPS404'}, {'W0102'}, id='list_as_default'),
+    param_wrapper((
+        'def check_parameter(*, parameter_value=[1, 2, 3]):',
+        '    return parameter_value',
+    ), {'B006'}, set(), id='list_as_kwonly_default'),
+    param_wrapper((
+        'def check_parameter(parameter_value={}):',  # noqa: P103 it's an empty dict, not string formatting
+        '    return parameter_value',
+    ), {'B006', 'WPS404'}, {'W0102'}, id='dict_as_default'),
+    param_wrapper((
+        'def check_parameter(parameter_value=set()):',
+        '    return parameter_value',
+    ), {'B006', 'WPS404'}, {'W0102'}, id='set_as_default'),
+    param_wrapper((
+        'default_value = {1, 2, 3}',
+        '',
+        '',
+        'def check_parameter(parameter_value=default_value):',
+        '    return parameter_value',
+    ), set(), {'W0102'}, id='variable_as_default'),
+    param_wrapper((
+        'import collections',
+        '',
+        '',
+        'def check_parameter(parameter_value=collections.OrderedDict()):',
+        '    return parameter_value',
+    ), {'B006', 'WPS404'}, set(), id='ordered_dict_as_default'),
+    param_wrapper((
+        'import collections',
+        '',
+        '',
+        'async def check_parameter(parameter_value=collections.OrderedDict()):',
+        '    return parameter_value',
+    ), {'B006', 'WPS404'}, set(), id='ordered_dict_as_async_default'),
+    param_wrapper((
+        'import time',
+        '',
+        '',
+        'def check_parameter(parameter_value=time.time()):',
+        '    return parameter_value',
+    ), {'B008', 'WPS404'}, set(), id='call_as_default'),
 ]
 
 
@@ -52,4 +56,8 @@ params = [
 def test_detects_incorrect_defaults_for_parameters(content, flake8_errors, pylint_errors, file_to_lint):
     file_to_lint.write_text(content)
 
-    assert_that(file_to_lint, violates_rules(flake8_errors=flake8_errors, pylint_errors=pylint_errors))
+    found_flake8_errors = run_flake8(file_to_lint)
+    assert_that(set(found_flake8_errors), contains_inanyorder(*flake8_errors))
+
+    found_pylint_errors = run_pylint(file_to_lint)
+    assert_that(set(found_pylint_errors), contains_inanyorder(*pylint_errors))
