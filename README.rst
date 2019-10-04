@@ -8,6 +8,11 @@ Flake8 & Pylint comparison
 
 Comparison of things that are covered by flake8 and/or pylint.
 
+Currently still WIP.
+
+Rules are being added to ``comparison/all_rules.yaml``. After finishing rules analysis files with statistics will be
+generated from this yaml file.
+
 * Free software: MIT license
 
 Getting started
