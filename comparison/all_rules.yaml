@@ -91,3 +91,27 @@
   flake8_plugin: flake8-bugbear
   tests: test_function_parameters.py
   note: WPS404 covers the same case
+- flake8_code: B009
+  pylint_code:
+  short_description: Calling `getattr` without default for hardcoded attribute name.
+  flake8_partial_support:
+  pylint_partial_support:
+  flake8_plugin: flake8-bugbear
+  tests: test_attributes.py
+  note:
+- flake8_code: B010
+  pylint_code:
+  short_description: Calling `setattr` for hardcoded attribute name.
+  flake8_partial_support:
+  pylint_partial_support:
+  flake8_plugin: flake8-bugbear
+  tests: test_attributes.py
+  note:
+- flake8_code: B011
+  pylint_code:
+  short_description: Using `assert False`
+  flake8_partial_support:
+  pylint_partial_support:
+  flake8_plugin: flake8-bugbear
+  tests: test_assertions.py
+  note: S101 from `bandit` covers all assertions; WPS444 covers all falsy values in `assert` and `while`
